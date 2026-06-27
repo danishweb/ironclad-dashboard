@@ -52,8 +52,8 @@ export function TopBar() {
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link href="/api/auth/logout">Log out</Link>
+            <DropdownMenuItem asChild>
+              <a href="/api/auth/logout">Log out</a>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
