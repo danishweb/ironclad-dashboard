@@ -3,6 +3,11 @@ import { mockAppOrgs, mockApps, mockMemberships, mockOrgs, mockPrivileges, mockP
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
+// Ponytail ultra: minimal integration hook to trigger DB JIT provisioning on first load
+export const initBackendSession = async () => {
+  try { await fetch('/api/proxy/v1/whoami'); } catch (e) { /* ignore */ }
+};
+
 export const appsApi = {
   list: async (): Promise<App[]> => { await delay(150); return [...mockApps]; },
   getById: async (id: string): Promise<App | undefined> => { await delay(150); return mockApps.find(a => a.id === id); },
