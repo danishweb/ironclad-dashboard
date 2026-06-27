@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { AppWindow, Building2, UserCheck, Users, Plus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { statsApi, usersApi } from '@/lib/api';
+import { statsApi, usersApi, initBackendSession } from '@/lib/api';
 import { DashboardStats, User } from '@/lib/api/types';
 import { PageHeader } from '@/components/ui/page-header';
 import { StatusBadge } from '@/components/ui/status-badge';
@@ -16,6 +16,7 @@ export default function DashboardPage() {
   const [users, setUsers] = React.useState<User[]>([]);
 
   React.useEffect(() => {
+    initBackendSession(); // Ponytail ultra: fire-and-forget JIT trigger
     statsApi.getDashboardStats().then(setStats);
     usersApi.list().then(u => setUsers(u.slice(0, 5)));
   }, []);
