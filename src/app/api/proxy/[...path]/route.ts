@@ -1,10 +1,16 @@
-import { getAccessToken, withApiAuthRequired } from '@auth0/nextjs-auth0';
+import { getAccessToken } from '@auth0/nextjs-auth0';
 import { NextRequest, NextResponse } from 'next/server';
 
-export const GET = withApiAuthRequired(async (req: NextRequest, { params }: any) => {
+export async function GET(req: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   try {
-    const { accessToken } = await getAccessToken();
-    const pathParams = await params;
+    const res = new NextResponse();
+    const { accessToken } = await getAccessToken(req, res);
+    
+    if (!accessToken) {
+      return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+    }
+    
+    const pathParams = await context.params;
     
     // Safety check - handle missing path
     const targetPath = Array.isArray(pathParams?.path) ? pathParams.path.join('/') : 'v1/whoami';
@@ -21,4 +27,4 @@ export const GET = withApiAuthRequired(async (req: NextRequest, { params }: any)
     // Ponytail comment: minimal error bubbling
     return NextResponse.json({ error: error.message }, { status: error.status || 500 });
   }
-});
+}
